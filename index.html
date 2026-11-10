@@ -8,7 +8,7 @@
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0}
-body{background:linear-gradient(#e6f0f9,#f6faff 55%,#fff);font-family:Georgia,"Times New Roman",serif;overflow:hidden;position:relative;color:#25354a;--s:min(calc((100vw - 24px)/5.4),82px,calc((100vh - 330px)/6.3))}
+body{background:linear-gradient(#e6f0f9,#f6faff 55%,#fff);font-family:Georgia,"Times New Roman",serif;overflow:hidden;position:relative;color:#25354a;--s:min(calc((100vw - 24px)/5.4),82px,calc((100vh - 370px)/6.3))}
 .c1{--bg:#c4162a;--bg2:#8e0e1c;--rb:#e8b830;--nc:#ffd24a}
 .c2{--bg:#1b8a43;--bg2:#0f5a29;--rb:#f4f4f0;--nc:#fff}
 .c3{--bg:#e9b52f;--bg2:#a8761a;--rb:#c8102e;--nc:#c8102e}
@@ -18,7 +18,7 @@ body{background:linear-gradient(#e6f0f9,#f6faff 55%,#fff);font-family:Georgia,"T
 .bgs{position:fixed;left:0;bottom:0;width:100%;height:36vh;z-index:1}
 #ttl{position:relative;z-index:3;width:min(88vw,400px);margin:5vh auto 0;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 #ttl svg{display:block;width:100%;overflow:visible}
-#ttl use{stroke-linecap:round;stroke-dasharray:.01 60;fill:none}
+#ttl use{stroke-linecap:round;stroke-dasharray:.01 64;fill:none}#ttl use.bs{fill:#14110f;stroke:#14110f;stroke-width:3;stroke-dasharray:none;stroke-linejoin:round}
 .L{animation:bl 1.4s ease-in-out infinite}
 @keyframes bl{50%{opacity:.2}}
 #load{position:absolute;z-index:5;top:55%;left:50%;width:min(82vw,420px);transform:translate(-50%,-50%);text-align:center;transition:opacity .5s}
@@ -30,7 +30,7 @@ body{background:linear-gradient(#e6f0f9,#f6faff 55%,#fff);font-family:Georgia,"T
 .lg{transform-box:fill-box;transform-origin:50% 0;animation:run .3s ease-in-out infinite alternate}
 .lg2{animation-direction:alternate-reverse}
 @keyframes run{from{transform:rotate(-32deg)}to{transform:rotate(32deg)}}
-#cal{position:absolute;left:50%;bottom:6.5vh;z-index:3;width:calc(var(--s)*5.4);height:calc(var(--s)*6.2);transform:translateX(-50%)}
+#cal{position:absolute;left:50%;bottom:calc(6.5vh + 40px);z-index:3;width:calc(var(--s)*5.4);height:calc(var(--s)*6.2);transform:translateX(-50%)}
 .pk{position:absolute;width:var(--s);height:var(--s);cursor:pointer;animation:fall .8s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:var(--d)}
 .pk.t{width:calc(var(--s)*.95);height:calc(var(--s)*2.05)}
 @keyframes fall{from{transform:translateY(110vh) rotate(8deg);opacity:0}}
@@ -101,7 +101,7 @@ body{background:linear-gradient(#e6f0f9,#f6faff 55%,#fff);font-family:Georgia,"T
 <p>Das Weihnachtsdorf macht sich bereit …</p></div>
 <div id="cal"></div>
 <div id="ov"><div class="stage" id="st"><div class="card"><h2 id="ct"></h2><div id="cx"></div><button id="cl">Los geht’s!</button></div><div class="flap fl"><i></i></div><div class="flap fr"><i></i></div><svg class="ob" viewBox="0 0 100 60"><use href="#bw"/></svg><div class="bn" id="bn"></div></div></div>
-<div id="tp" hidden><span>Testdatum:</span><select id="sel"></select><button id="rs">Erledigt zurücksetzen</button><button id="tx">OK</button></div>
+<div id="tp" hidden><span>Testdatum:</span><select id="sel"></select><span>Ton:</span><select id="snd"></select><button id="pl">▶ Anhören</button><button id="rs">Erledigt zurücksetzen</button><button id="tx">OK</button></div>
 <script>
 const $=id=>document.getElementById(id);
 const D=[,
@@ -136,7 +136,7 @@ const S=[[14,0,0],[3,1.1,0],[21,2.2,0],[9,3.3,0],[17,4.4,0],
 [18,.55,4],[10,1.65,4],[5,2.75,4],[15,3.85,4],
 [12,2.2,5]];
 const BIG=[12,18,10,5,15,7];
-let test=null,ac,cur=0;
+let test=null,ac,cur=0,ton=0;try{ton=+localStorage.getItem('lauf-ton')||0}catch(e){}
 // Erledigt-Markierung: wird nur auf diesem Gerät im Browser gespeichert (kein Login nötig)
 const KEY='lauf-adventskalender-erledigt';let done=new Set();
 try{done=new Set(JSON.parse(localStorage.getItem(KEY)||'[]'))}catch(e){}
@@ -145,8 +145,8 @@ const day=()=>{if(test!==null)return test;const d=new Date();return d.getMonth()
 // Schnee
 for(let i=0;i<40;i++){const f=document.createElement('i'),s=2+Math.random()*4;f.style.cssText=`left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${6+Math.random()*8}s;animation-delay:-${Math.random()*10}s`;$('snow').append(f)}
 // Lichterkette in Schreibschrift
-(function(){let h='<svg viewBox="0 0 400 190"><defs><g id="tx" fill="none" font-family="\'Great Vibes\',cursive" text-anchor="middle"><text x="200" y="80" font-size="88">Lauf-</text><text x="200" y="168" font-size="72">Adventskalender</text></g></defs><use href="#tx" stroke="#111" stroke-width="2.6" style="stroke-dasharray:none;stroke-linejoin:round"/>';
-['#ff3b3b','#ffc928','#33c957','#2f9bff'].forEach((c,i)=>{h+=`<g class="L" style="animation-delay:-${i*.45}s;animation-duration:${1.1+i*.35}s" stroke="${c}" stroke-dashoffset="${-15*i}"><use href="#tx" stroke-width="15" opacity=".25"/><use href="#tx" stroke-width="6.5"/></g>`});
+(function(){let h='<svg viewBox="0 0 400 190"><defs><g id="tx" font-family="\'Great Vibes\',cursive" text-anchor="middle"><text x="200" y="80" font-size="88">Lauf-</text><text x="200" y="168" font-size="72">Adventskalender</text></g></defs><use class="bs" href="#tx"/>';
+['#ff3b3b','#ffc928','#33c957','#2f9bff'].forEach((c,i)=>{h+=`<g class="L" style="animation-delay:-${i*.45}s;animation-duration:${1.1+i*.35}s" stroke="${c}" stroke-dashoffset="${-16*i}"><use href="#tx" stroke-width="13" opacity=".22"/><use href="#tx" stroke-width="6.5"/></g>`});
 $('ttl').innerHTML=h+'</svg>'})();
 // Ladebalken mit Elfe
 const t0=performance.now(),DUR=3200,trk=document.querySelector('.trk');
@@ -168,13 +168,24 @@ $('cal').onclick=e=>{const p=e.target.closest('.pk');if(!p)return;const n=+p.dat
 function openDoor(n,p){cur=n;const st=$('st');st.className='stage '+[...p.classList].find(c=>/^c\d$/.test(c));$('ct').textContent=D[n][0];$('cx').innerHTML=D[n][1];$('bn').textContent=n;$('ov').classList.add('on');
  bells();setTimeout(()=>st.classList.add('open'),30)}
 $('cl').onclick=()=>{if(cur){done.add(cur);save()}$('ov').classList.remove('on');apply()};
-// Schlittenglocken: dreimal rasseln (selbst erzeugt, keine Datei nötig)
-function ping(f,t,g,d){const o=ac.createOscillator(),v=ac.createGain();o.type='triangle';o.frequency.value=f;v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(v);v.connect(ac.destination);o.start(t);o.stop(t+d+.02)}
-function bells(){if(!ac)return;const t0=ac.currentTime+.02;[0,.38,.76].forEach(o=>{for(let k=0;k<22;k++){const r=Math.random(),t=t0+o+r*.28,f=2800+Math.random()*3000,g=.05*(1.1-Math.abs(r-.5)*1.4);[[f,1],[f*1.51,.6],[f*2.3,.3]].forEach(([fr,m])=>ping(fr,t,g*m,.16+Math.random()*.1))}ping(1568,t0+o,.06,.7);ping(2093,t0+o+.02,.04,.6)})}
+// Glocken-Töne (selbst erzeugt, keine Dateien nötig)
+function ping(f,t,g,d,ty){const o=ac.createOscillator(),v=ac.createGain();o.type=ty||'triangle';o.frequency.value=f;v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(v);v.connect(ac.destination);o.start(t);o.stop(t+d+.02)}
+function bell(f,t,g,d,P){(P||[[1,1],[2.76,.35],[5.4,.12]]).forEach(([r,m])=>ping(f*r,t,g*m,d/(.6+r*.4),'sine'))}
+function shake(t0,n){for(let k=0;k<n;k++){const r=Math.random(),t=t0+r*.25,f=2800+Math.random()*3000,g=.04*(1.1-Math.abs(r-.5)*1.4);[[f,1],[f*1.51,.6],[f*2.3,.3]].forEach(([fr,m])=>ping(fr,t,g*m,.16+Math.random()*.1))}}
+const TON=['Schlittenglocken-Rasseln','Jingle-Bells-Melodie','Kirchenglocken','Zauber-Glöckchen'];
+const SND=[
+()=>{const t=ac.currentTime+.02;[0,.38,.76].forEach(o=>{shake(t+o,22);ping(1568,t+o,.06,.7);ping(2093,t+o+.02,.04,.6)})},
+()=>{const t=ac.currentTime+.02,q=.14;[[659,0],[659,1],[659,2],[659,4],[659,5],[659,6],[659,8],[784,9],[523,10],[587,11],[659,12]].forEach(([f,i])=>{bell(f,t+i*q,.16,i===12?1.1:.55);if(i%2===1)shake(t+i*q,4)})},
+()=>{const t=ac.currentTime+.02;[[392,0],[523,.7],[392,1.4]].forEach(([f,o])=>bell(f,t+o,.22,2.4,[[.5,.6],[1,1],[1.19,.6],[1.5,.5],[2,.45],[2.5,.25],[4,.12]]))},
+()=>{const t=ac.currentTime+.02;[1047,1319,1568,2093,2637,3136,2637,3136,4186].forEach((f,i)=>bell(f,t+i*.07,.1,1.1,[[1,1],[2,.25]]));for(let k=0;k<14;k++)ping(3500+Math.random()*3000,t+.4+Math.random()*.9,.025,.18,'sine')}];
+function bells(){if(ac)SND[ton]()}
 // Versteckter Testmodus: Titel ca. 1 Sekunde gedrückt halten
 const sel=$('sel');sel.innerHTML='<option value="">Echtes Datum</option><option value="0">Vor dem 1. Dezember</option>'+Array.from({length:24},(_,i)=>`<option value="${i+1}">${i+1}. Dezember${i===23?' (alles leer)':''}</option>`).join('');
 sel.onchange=()=>{test=sel.value===''?null:+sel.value;apply()};
 $('rs').onclick=()=>{done=new Set();save();apply()};
+const snd=$('snd');snd.innerHTML=TON.map((n,i)=>`<option value="${i}">${i+1}: ${n}</option>`).join('');snd.value=ton;
+snd.onchange=()=>{ton=+snd.value;try{localStorage.setItem('lauf-ton',ton)}catch(e){}};
+$('pl').onclick=()=>{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();SND[ton]()};
 $('tx').onclick=()=>$('tp').hidden=true;
 let lp;const ttl=$('ttl');
 ttl.addEventListener('pointerdown',()=>{lp=setTimeout(()=>$('tp').hidden=false,800)});
